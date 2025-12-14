@@ -3,3 +3,14 @@
 .dvc/tmp
 .dvc/cache
 /models
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints 
+.vscode/
+.idea/
+.env
+.env.*
+
+mlruns/
+mlartifacts/

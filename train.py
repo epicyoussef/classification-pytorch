@@ -118,7 +118,14 @@ def train_classifier(model, train_loader, val_loader, criterion, optimizer, num_
 
     # MLflow context manager only if MLflow is enabled
     if use_mlflow:
-        run_context = mlflow.start_run(run_name=run_name)
+        # If there's already an active MLflow run, start a nested run to avoid
+        # the "Run ... is already active" exception. Otherwise start a new run.
+        active = mlflow.active_run()
+        if active is not None:
+            logging.info("An active MLflow run detected (run_id=%s). Starting nested run.", active.info.run_id)
+            run_context = mlflow.start_run(run_name=run_name, nested=True)
+        else:
+            run_context = mlflow.start_run(run_name=run_name)
     else:
         # Create a dummy context manager that does nothing
         from contextlib import nullcontext
